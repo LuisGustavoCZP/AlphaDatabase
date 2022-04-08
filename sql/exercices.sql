@@ -23,12 +23,7 @@ INNER JOIN public.privilege AS privilege ON request.access_privilege=privilege.i
 --SELECT * FROM public.user AS usr WHERE usr.privilege NOT IN (3, 2);
 --UPDATE public.user AS usr SET (updated_at, updated_by) = ('2022-04-07 03:03:00', '1') WHERE usr.name LIKE 'Professor%';
 --SELECT * FROM public.user AS usr WHERE usr.privilege IN (1, 2);
---/*
---CREATE OR REPLACE VIEW vw_user AS
-SELECT usr.id, usr.name, CONCAT(privilege.name, '(', privilege.level, ')') AS privilege
-FROM public.user AS usr
-INNER JOIN public.privilege AS privilege ON usr.privilege=privilege.id;
---*/
+
 
 --INSERT INTO public.status (name, created_at, created_by) VALUES ('pendente', '2022-04-05 23:03:00', -1);
 --INSERT INTO public.status (name, created_at, created_by) VALUES ('finalizado', '2022-04-05 23:03:00', -1);
@@ -43,14 +38,6 @@ INNER JOIN public.privilege AS privilege ON usr.privilege=privilege.id;
 
 --INSERT INTO public.requestor_phone (requestor_id, phone_ddd, phone_number, created_at, created_by) VALUES (1, '45', '933002944', '2022-04-05 23:03:00', -1);
 --SELECT * FROM public.requestor_phone;
-
---/*
---CREATE OR REPLACE VIEW vw_requestor AS
-SELECT reque.name, reque.email, CONCAT ('(', phone.phone_ddd, ')', phone.phone_number ) AS phone , CONCAT ('Rua ', address.street, ', ', address.street_number, '. ', address.district, '. ', address.city) AS address, address.cep, reque.id
-FROM public.requestor AS reque
-INNER JOIN public.requestor_address AS address ON reque.address_id=address.id
-INNER JOIN public.requestor_phone AS phone ON reque.id=phone.requestor_id;
---*/
 
 --SELECT * FROM vw_requestor
 
@@ -70,6 +57,19 @@ INNER JOIN vw_requestor AS requestor ON requestor.id=proto.requestor_id
 --INSERT INTO public.process (protocol_id, status_id, started_at, access_privilege, operator_id, created_at, created_by) VALUES (1, 1, '2022-04-05', 2, 1, '2022-04-05 23:03:00', -1);
 --SELECT * FROM public.process;
 
+--/*
+--CREATE OR REPLACE VIEW vw_user AS
+SELECT usr.id, usr.name, CONCAT(privilege.name, '(', privilege.level, ')') AS privilege
+FROM public.user AS usr
+INNER JOIN public.privilege AS privilege ON usr.privilege=privilege.id;
+--*/
+--/*
+--CREATE OR REPLACE VIEW vw_requestor AS
+SELECT reque.name, reque.email, CONCAT ('(', phone.phone_ddd, ')', phone.phone_number ) AS phone , CONCAT ('Rua ', address.street, ', ', address.street_number, '. ', address.district, '. ', address.city) AS address, address.cep, reque.id
+FROM public.requestor AS reque
+INNER JOIN public.requestor_address AS address ON reque.address_id=address.id
+INNER JOIN public.requestor_phone AS phone ON reque.id=phone.requestor_id;
+--*/
 --/*
 --CREATE OR REPLACE VIEW vw_process AS
 SELECT protocol.id, protocol.requestor_name AS requestor, protocol.request_name AS request, status, usr.name AS operator, started_at 
