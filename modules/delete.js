@@ -1,14 +1,20 @@
 const database = require('./database');
+
 //Deletar usuarios.
 async function del (req, res) 
 {
-    const thisuser = 1;
-    const resp = await database.query(`UPDATE public.user AS usr SET (deleted_at, deleted_by) = ('2022-04-07 03:03:00', ${thisuser}) WHERE id=$1; DELETE FROM public.user WHERE id=$1;`, [req.params['userid']])
+    const thisuser = req.thisuser;
+    const response = await database.query(`DELETE FROM public.user CASCADE WHERE username=$1;`, [req.params['username']])
+    .then(async resp => {
+        const r = await database.query(`UPDATE public.deleted_user AS usr SET (deleted_at, deleted_by) = (to_timestamp(${Date.now()} / 1000.0), ${thisuser}) WHERE username=$1;`, [req.params['username']])
+        res.send("Deletou aqui");
+    })
     .catch(error => {
         console.log(error);//.detail
+        res.send(`Deu erro aqui ${error}`);
     });
-    console.log("DB ", resp.rows);
-    res.end();
+    console.log("DB ", response);
+    //res.end();
 }
 
 module.exports = del;

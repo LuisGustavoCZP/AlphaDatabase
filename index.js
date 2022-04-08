@@ -11,6 +11,7 @@ const register = require('./modules/register');
 const del = require('./modules/delete');
 const modify = require('./modules/modify');
 const check = require('./modules/check');
+const deletes = require('./modules/deleted');
 
 const app = express();
 
@@ -20,12 +21,14 @@ app.use(express.urlencoded({ extended: true}));
 
 app.post ("/login", login);
 
-app.get ("/register", session, register);
+app.post ("/register", session.verify, register);
 
-app.delete ("/delete", session, del);
+app.delete ("/delete/:username", session.verify, del);
 
-app.put ("/modify", session, modify);
+app.put ("/modify/:username", session.verify, modify);
 
-app.get ("/check", session, check);
+app.get ("/check", session.verify, check);
+
+app.get ("/deleted", session.verify, deletes);
 
 app.listen(port, () => {console.log(`O servidor foi iniciado em ${port}`)});

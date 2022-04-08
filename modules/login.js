@@ -1,32 +1,52 @@
 const database = require('./database');
+const bcrypt = require('bcrypt');
+const session = require('./session');
+
 //Logar com nome e senha usuarios.
 async function login (req, res) 
 {
-    const resp = await database.query('SELECT * FROM public.user WHERE username=$1', [req.body["username"]])
-    .catch(error => {
-        console.log(error);//.detail
-    }); //AND password=$2
-    //Encontrou usuario?
-    if(res.rows.length > 0) 
+    const {username, password} = req.body;
+    if(!password) 
     {
-        const pass = req.body["password"];
-        const user = res.rows[0];
+        res.send("Não inseriu senha!");
+    } 
+    else
+    {
+        const response = await database.query('SELECT * FROM public.user WHERE username=$1', [username])
+        .then(resp => 
+        {
+            //Encontrou usuario?
+            if(resp.rows && resp.rows.length > 0) 
+            {
+                const user = resp.rows[0];
+                bcrypt.compare(password, user.password, (err, same) => 
+                {
+                    if(same) 
+                    {
+                        session.create(res, user.id);
+                        res.send(`Login feito para ${user.name}`);
+                    }
+                    else 
+                    {
+                        session.clear(res);
+                        res.send(`A senha não bate com o login!`);
+                        
+                    }
+                });
+            }
+            //Não encontrou usuario
+            else 
+            {
+                session.clear(res);
+                res.send(`Não existe usuario com este login!`);
+            }
+        })
+        .catch(error => {
+            console.log(error);//.detail
+            res.send(error);
+        }); //AND password=$2
         
-    }
-    //Não encontrou usuario
-    else 
-    {
-
     }
 }
 
 module.exports = login;
-
-
-/* const users = [{name:"luis", pass:""}];
-const sessoes = {};
-
- */
-/* const crypto = require('crypto');
-const dotenv = require('dotenv');
-const bcrypt = require('bcrypt'); */

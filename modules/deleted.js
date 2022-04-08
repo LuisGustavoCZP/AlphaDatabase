@@ -1,10 +1,9 @@
 const database = require('./database');
 
 //Checar usuarios usando nome ou id.
-async function check (req, res) 
+async function deleted (req, res) 
 {
-    const { username='', userid=-1, name='' } = req.query;
-    const response = await database.query('SELECT * FROM public.user AS usr WHERE usr.id=$1 OR usr.username=$2 OR usr.name=$3', [userid, username, name])
+    const response = await database.query('SELECT * FROM public.deleted_user')
     .then(resp => {
         console.log("Check ", resp.rows);
         res.send(resp.rows);
@@ -16,4 +15,4 @@ async function check (req, res)
     //
 }
 
-module.exports = check;
+module.exports = deleted;

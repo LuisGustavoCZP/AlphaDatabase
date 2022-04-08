@@ -12,7 +12,8 @@ const dbData = {
 // ==> Conexão com a Base de Dados:
 const pool = new Pool(dbData);
 
-pool.on('connect', () => {
+pool.on('connect', () => 
+{
   console.log('Base de Dados conectado com sucesso!');
 });
 
