@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 const dbData = {
     host: 'localhost',
-    user: 'postgres',
+    user: 'alphauser',
     password: process.env.BD_PASS,
     database: process.env.BD_NAME,
     max: 20,
