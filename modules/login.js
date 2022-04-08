@@ -44,7 +44,7 @@ async function login (req, res)
         .catch(error => {
             console.log(error);//.detail
             res.send(error);
-        }); //AND password=$2
+        });
         
     }
 }
