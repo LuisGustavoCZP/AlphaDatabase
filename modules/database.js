@@ -4,7 +4,7 @@ const dbData = {
     user: 'alphauser',
     password: process.env.BD_PASS,
     database: process.env.BD_NAME,
-    max: 20,
+    max: process.env.BD_MAX||20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
 };
