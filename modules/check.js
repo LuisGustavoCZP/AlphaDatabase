@@ -3,7 +3,10 @@ const database = require('./database');
 async function check (req, res) 
 {
     //req.query('username' 'userid');
-    const resp = await database.query('SELECT * FROM public.user', []);
+    const resp = await database.query('SELECT * FROM public.user', [])
+    .catch(error => {
+        console.log(error);//.detail
+    });
     console.log("DB ", resp.rows);
     res.end();
 }

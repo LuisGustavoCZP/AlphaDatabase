@@ -2,7 +2,10 @@ const database = require('./database');
 //Logar com nome e senha usuarios.
 async function login (req, res) 
 {
-    const resp = await database.query('SELECT * FROM public.user WHERE username=$1', [req.body["username"]]); //AND password=$2
+    const resp = await database.query('SELECT * FROM public.user WHERE username=$1', [req.body["username"]])
+    .catch(error => {
+        console.log(error);//.detail
+    }); //AND password=$2
     //Encontrou usuario?
     if(res.rows.length > 0) 
     {
