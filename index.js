@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
+const port = process.env.PORT;
 //CRUDE = INSERT, UPDATE, DELETE, SELECT
 const visual = require('./modules/visual');
 const login = require('./modules/login');
@@ -30,4 +31,4 @@ app.get ("/check", session.verify, check);
 
 app.get ("/deleted", session.verify, deletes);
 
-app.listen(process.env.PORT, () => {console.log(`O servidor foi iniciado em ${port}`)});
+app.listen(port, () => {console.log(`O servidor foi iniciado em ${port}`)});
